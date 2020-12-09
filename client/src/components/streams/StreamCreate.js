@@ -2,11 +2,29 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 
 class StreamCreate extends React.Component{
-  renderInput({ input, label }){
+  renderError = ({ error, touched }) => {
+    if(error && touched){
+      return (
+        <div className="ui error message" style={{display:'block'}}>
+          <div className="header">
+            {error}
+          </div>
+        </div>
+      );
+    }
+  }
+
+  renderInput = ({ input, label, meta }) => {
+    const className = `field ${ meta.error && meta.touched ? 'error': ''}`;
     return (
-      <div className="field">
+      <div className={className}>
         <label>{label}</label>
-        <input {...input}/>
+        <input {...input} autoComplete="off"/>
+        {/* use touch on input to display validate error */}
+        { this.renderError(meta)}
+
+        {/* use if submit success or fail to display validate error */}
+        {/* { (meta.submitFailed)? (<div>{meta.error}</div>) : null } */}
       </div>
     );
   }
@@ -38,5 +56,6 @@ const validate = (formValues) => {
 }
 
 export default reduxForm({
-  form: 'streamCreate'
+  form: 'streamCreate',
+  validate: validate
 })(StreamCreate);
