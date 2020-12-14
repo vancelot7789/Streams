@@ -49,8 +49,11 @@ export const fetchStream = (streamId) => {
 
 export const editStream = (streamId, formValues) => {
   return async(dispatch) => {
-    const reponse = await streams.put(`/streams/:${streamId}`, formValues);
+    const reponse = await streams.patch(`/streams/${streamId}`, formValues);
     dispatch({ type: EDIT_STREAM, payload: reponse.data });
+
+    //Do some programmatic navigation to get user back to the root route
+    history.push('/');
   }
 }
 
